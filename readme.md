@@ -2,12 +2,11 @@
 
 ## Proje Açıklaması
 
-Tebrikler, Backend konularını tamamladın. 
+Tebrikler, Backend konularını tamamladın.
 
-Bilgisayar bilimleri konularına geçmeden önce öğrendiğin her konuyu kullanarak -daha önce react tekrarı için yaptığın- twitter clone'u projesi için REST API oluşturacaksın. Bu senin Backend konusunda ne seviyede olduğunu gösterecek. 
-Yaptığın siteyi Heroku'da da yayınlayacaksın(sanal kart girmeyi ve sanal karta limit koymamaya dikkat!!!). 
+Bilgisayar bilimleri konularına geçmeden önce öğrendiğin her konuyu kullanarak -daha önce react tekrarı için yaptığın- twitter clone'u projesi için REST API oluşturacaksın. Bu senin Backend konusunda ne seviyede olduğunu gösterecek.
+Yaptığın siteyi Heroku'da da yayınlayacaksın(sanal kart girmeyi ve sanal karta limit koymamaya dikkat!!!).
 Workintech programını tamamladığında şirketler yaptığın bu projeye de bakacaklar. O yüzden öğrendiğin her konuyu kullandığın, tam çalışır durumda bir proje yapmanı tavsiye ederiz.
-
 
 ## Talimatlar
 
@@ -22,7 +21,6 @@ Workintech programını tamamladığında şirketler yaptığın bu projeye de b
 - [ ] klasör yapısını anlaşılır ve anlamlı olacak şekilde hazırlayın.
 - [ ] Her adımda commit atmayı unutmayın!!
 
-
 ### Görev 2: API
 
 - [ ] Gerekli fonksiyonalite için ayrı endpointler oluşturun.
@@ -30,20 +28,17 @@ Workintech programını tamamladığında şirketler yaptığın bu projeye de b
 - [ ] Postman'da her endpoint için ayrı bir request oluşturun. Oluşturduğunuz collection'ı export edin ve projenin içerisine ekleyin.
 - [ ] Login için JWToken kullanın.
 
-
 ### Görev 3: DATA
 
 - [ ] Knex configuration ayarlarını yapın.
 - [ ] Farklı ortam(environment) ayarlarını yapın.
 - [ ] migration ve seed dosyalarını oluşturun.
 
-
 ### Görev 4: UNIT ve ENTEGRASYON TESTİ
 
 - [ ] Veritabanı erişim fonksiyonları için Unit Testleri oluşturun.
 - [ ] API endpointleri için entegrasyon testleri yazın.
 - [ ] testler için environment'ı değiştirdiğinizden ve knex'de ayrı ayarlar kullandığınızdan emin olun.
-
 
 #### PROJE DEĞERLENDİRME KRİTERLERİ:
 
@@ -62,4 +57,3 @@ Workintech programını tamamladığında şirketler yaptığın bu projeye de b
 - [ ] Secret ve environment ayarları farklı ortamlar için ayrı olacak şekilde ayarlanmış mı?
 - [ ] Postman'da collection oluşturulmuş ve export edilmiş mi?
 - [ ] Unit ve entegrasyonları testleri yeterli miktarda yazılmış mı?
-
