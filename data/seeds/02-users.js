@@ -9,7 +9,7 @@ const userData = [
     userEmail: "hakan@gmail.com",
     birthday: "12/09/1990",
     password: "Hakan+11",
-    role: "admin",
+    roleId: 1,
     avatarPhoto:
       "https://fastly.picsum.photos/id/43/1280/831.jpg?hmac=glK-rQ0ppFClW-lvjk9FqEWKog07XkOxJf6Xg_cU9LI",
   },
@@ -18,7 +18,7 @@ const userData = [
     userEmail: "meltem@gmail.com",
     birthday: "05/03/1989",
     password: "Meltem+11",
-    role: "user",
+    roleId: 2,
     avatarPhoto:
       "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
   },
@@ -27,7 +27,7 @@ const userData = [
     userEmail: "kenan@gmail.com",
     birthday: "12/09/1990",
     password: "Kenan+11",
-    role: "user",
+    roleId: 2,
     avatarPhoto:
       "https://fastly.picsum.photos/id/99/4912/3264.jpg?hmac=jobkGP8_9Sch9BmMGe3xmm8yjCVQ3iSHrbu_4kOOciY",
   },
@@ -36,7 +36,7 @@ const userData = [
     userEmail: "ramazan@gmail.com",
     birthday: "11/07/1989",
     password: "Ramazan+11",
-    role: "admin",
+    roleId: 1,
     avatarPhoto:
       "https://fastly.picsum.photos/id/88/1280/1707.jpg?hmac=NnkwPVDBTVxHkc4rALB_fyu-OHY2usdm7iRk5El7JC4",
   },

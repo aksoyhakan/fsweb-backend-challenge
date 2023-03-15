@@ -1,11 +1,17 @@
 const db = require("../../data/dbconfig");
 
 async function getAll() {
-  return await db("users");
+  return await db("users as u")
+    .leftJoin("roles as r", "r.roleId", "u.roleId")
+    .select("u.*", "r.*");
 }
 
 async function getById(userId) {
-  return await db("users").where({ userId }).first();
+  return await await db("users as u")
+    .leftJoin("roles as r", "r.roleId", "u.roleId")
+    .select("u.*", "r.*")
+    .where({ userId })
+    .first();
 }
 
 async function addUser(user) {
@@ -18,7 +24,7 @@ async function updateUser(userId, user) {
 }
 
 async function removeUser(userId) {
-  return await db("posts").where({ userId }).del();
+  return await db("users").where({ userId }).del();
 }
 
 module.exports = { getAll, getById, addUser, updateUser, removeUser };

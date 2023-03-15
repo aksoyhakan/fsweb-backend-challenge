@@ -1,13 +1,16 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import NavLinkHeader from "./components/NavLinkHeader";
 import MainPage from "./components/MainPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Posts from "./components/Posts";
 import Users from "./components/Users";
+import { useSelector } from "react-redux";
 
 function App() {
+  const token = useSelector((store) => store.token);
+
   return (
     <div>
       <NavLinkHeader />
@@ -22,10 +25,10 @@ function App() {
           <Register />
         </Route>
         <Route path="/api/posts">
-          <Posts />
+          {token ? <Posts /> : <Redirect to="/" />}
         </Route>
         <Route path="/api/users">
-          <Users />
+          {token ? <Users /> : <Redirect to="/" />}
         </Route>
       </Switch>
     </div>

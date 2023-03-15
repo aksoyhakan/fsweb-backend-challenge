@@ -6,6 +6,13 @@ export const LOGIN_UNVERIFIED = "LOGIN_UNVERIFIED";
 export const UI_MESSAGE_CHANGE = "UI_MESSAGE_CHANGE";
 export const REGISTER_USER = "REGISTER_USER";
 export const GET_POSTS = "GET_POSTS";
+export const LIKE_POST = "LIKE_POST";
+export const WRITE_COMMENT = "WRITE_COMMENT";
+export const CLICK_COMMENT = "CLICK_COMMENT";
+
+export function clickComment(postId) {
+  return { type: CLICK_COMMENT, payload: postId };
+}
 
 export function changeUIMessage(message) {
   return { type: UI_MESSAGE_CHANGE, payload: message };
@@ -29,7 +36,7 @@ export function getPosts(posts) {
 
 export const loginAPI = (user) => (dispatch) => {
   const { loginData, path } = user;
-  console.log(loginData);
+
   axios
     .post(`http://localhost:9000${path}`, loginData)
     .then((response) => {
@@ -53,7 +60,6 @@ export const registerAPI = (user) => (dispatch) => {
   axios
     .post(`http://localhost:9000${path}`, registData)
     .then((response) => {
-      console.log(response);
       dispatch(registerUser(response.data));
       toast.success(
         `ID No:${response.data.userId} user is created successfully `
@@ -63,7 +69,6 @@ export const registerAPI = (user) => (dispatch) => {
       }, 4000);
     })
     .catch((err) => {
-      console.log(err);
       dispatch(registerUser(err.response.data));
       toast.error(err.response.data.message);
       setTimeout(() => {
@@ -77,5 +82,29 @@ export const getPostAPI = (data) => (dispatch) => {
   axios
     .get(`http://localhost:9000${path}`, { headers: { authorization: token } })
     .then((response) => dispatch(getPosts(response.data)))
+    .catch((err) => console.log(err));
+};
+
+export const likePostAPI = (data) => (dispatch) => {
+  const { post, token } = data;
+  axios
+    .put(`http://localhost:9000/api/posts/${post.postId}`, post, {
+      headers: { authorization: token },
+    })
+    .then((response) => {
+      dispatch(getPosts(response.data));
+    })
+    .catch((err) => console.log(err));
+};
+
+export const writeCommentAPI = (data) => (dispatch) => {
+  const { comment, token } = data;
+
+  axios
+    .post(`http://localhost:9000/api/comment`, comment)
+    .then((response) => {
+      dispatch(getPosts(response.data));
+      dispatch(clickComment(comment.postId));
+    })
     .catch((err) => console.log(err));
 };

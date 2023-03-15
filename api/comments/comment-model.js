@@ -39,18 +39,9 @@ async function dataAdjuster() {
   return newPostArray;
 }
 
-async function getAll() {
+async function insertComment(comment) {
+  const addComment = await db("comments").insert(comment);
   return await dataAdjuster();
 }
 
-async function getByPostId(postId) {
-  const allData = await dataAdjuster();
-  return allData.filter((data) => data.postId == postId)[0];
-}
-
-async function updatePost(postId, post) {
-  const addPost = await db("posts").where({ postId }).update(post);
-  return await dataAdjuster();
-}
-
-module.exports = { getAll, getByPostId, updatePost };
+module.exports = { insertComment };

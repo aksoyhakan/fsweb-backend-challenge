@@ -4,6 +4,7 @@ import {
   UI_MESSAGE_CHANGE,
   REGISTER_USER,
   GET_POSTS,
+  CLICK_COMMENT,
 } from "./actions";
 
 const initialState = {
@@ -24,31 +25,48 @@ const initialState = {
   registerForm: { username: "", userEmail: "", birthday: "", password: "" },
   registedNotes: {},
   posts: [],
+  currentUser: JSON.parse(window.localStorage.getItem("currentUser")),
+  clickedPostComment: 0,
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN_VERIFIED:
-      console.log(action.payload);
       window.localStorage.setItem("token", action.payload.token);
+      window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify(action.payload.currentUser)
+      );
       return {
         ...state,
         uiNotes: action.payload.message,
         token: action.payload.token,
+        currentUser: action.payload.currentUser,
       };
     case LOGIN_UNVERIFIED:
       window.localStorage.setItem("token", "");
-      return { ...state, uiNotes: action.payload, token: "" };
+      window.localStorage.setItem("currentUser", JSON.stringify({}));
+      return {
+        ...state,
+        uiNotes: action.payload,
+        token: "",
+        currentUser: null,
+      };
     case UI_MESSAGE_CHANGE:
       return { ...state, uiNotes: action.payload };
     case REGISTER_USER:
-      console.log(action.payload, "reducere");
       return {
         ...state,
         registedNotes: action.payload,
       };
     case GET_POSTS:
       return { ...state, posts: action.payload };
+    case CLICK_COMMENT:
+      return {
+        ...state,
+        clickedPostComment:
+          state.clickedPostComment == action.payload ? 0 : action.payload,
+      };
     default:
       return state;
   }

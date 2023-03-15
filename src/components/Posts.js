@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPostAPI } from "../reducer/actions";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import Post from "./Post";
 import styled from "styled-components";
 
@@ -15,9 +15,9 @@ const SCPostsDiv = styled.div`
 function Posts() {
   const posts = useSelector((store) => store.posts);
   const token = useSelector((store) => store.token);
+
   const dispatch = useDispatch();
   const { url } = useRouteMatch();
-  const { push } = useHistory();
 
   useEffect(() => {
     let data = { token: token, path: url };
@@ -26,8 +26,8 @@ function Posts() {
 
   return (
     <SCPostsDiv>
-      {posts.map((post) => (
-        <Post data={post} />
+      {posts.map((post, index) => (
+        <Post key={index} data={post} />
       ))}
     </SCPostsDiv>
   );

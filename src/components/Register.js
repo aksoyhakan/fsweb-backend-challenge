@@ -63,9 +63,11 @@ function Register() {
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
   const { push } = useHistory();
-  console.log(note, "notes");
+
   function onSubmit(data) {
-    console.log(data);
+    if (!data.avatarPhoto)
+      data.avatarPhoto =
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVhcVcxgW8LzmIu36MCeJb81AHXlI8CwikrHNh5vzY8A&s";
     let newData = {
       registData: data,
       path: url,
@@ -134,7 +136,15 @@ function Register() {
           />
         </SCInputDiv>
         {errors.birthday && <SCError>{errors.birthday.message} </SCError>}
-
+        <SCInputDiv errorstatu={errors.avatarPhoto}>
+          <label htmlFor="avatarPhoto">Photo:</label>
+          <input
+            type="text"
+            id="avatarPhoto"
+            style={{ padding: "0.5rem" }}
+            {...register("avatarPhoto")}
+          />
+        </SCInputDiv>
         <SCButton type="submit" disabled={!isValid}>
           Kaydol
         </SCButton>
