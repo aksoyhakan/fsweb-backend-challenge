@@ -5,14 +5,13 @@ import {
   REGISTER_USER,
   GET_POSTS,
   CLICK_COMMENT,
+  GET_USERS,
 } from "./actions";
 
 const initialState = {
   navlinks: [
-    { link: "Login", path: "/api/auth/login" },
     { link: "Register", path: "/api/auth/register" },
     { link: "Posts", path: "/api/posts" },
-    { link: "Users", path: "/api/users" },
   ],
   mainPage: {
     url: "https://mediacloud.theweek.com/image/upload/f_auto,t_content-image-desktop@1/v1650294051/mrz041722dAPR.jpg",
@@ -25,6 +24,7 @@ const initialState = {
   registerForm: { username: "", userEmail: "", birthday: "", password: "" },
   registedNotes: {},
   posts: [],
+  users: [],
   currentUser: JSON.parse(window.localStorage.getItem("currentUser")),
   clickedPostComment: 0,
 };
@@ -67,6 +67,8 @@ function reducer(state = initialState, action) {
         clickedPostComment:
           state.clickedPostComment == action.payload ? 0 : action.payload,
       };
+    case GET_USERS:
+      return { ...state, users: action.payload };
     default:
       return state;
   }

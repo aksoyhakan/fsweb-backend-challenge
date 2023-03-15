@@ -21,7 +21,7 @@ router.post(
       const currentUser = {
         subject: searchedUser.userId,
         username: searchedUser.username,
-        role: searchedUser == 1 ? "admin" : "user",
+        role: searchedUser.roleId == 1 ? "admin" : "user",
         avatarPhoto: searchedUser.avatarPhoto,
       };
 
@@ -40,7 +40,7 @@ function generateToken(user) {
   let payload = {
     subject: user.userId,
     username: user.username,
-    role: user.roleId == 1 ? "admin" : "user",
+    role: user.roleId == "1" ? "admin" : "user",
     avatarPhoto: user.avatarPhoto,
   };
 
@@ -58,7 +58,8 @@ router.post(
   (req, res, next) => {
     const hashPassword = bcrypt.hashSync(req.body.password, 8);
     req.body.password = hashPassword;
-    req.body.roleId = 2;
+
+    req.body.roleId = 1;
     UserModels.addUser(req.body)
       .then((response) => res.status(201).json(response))
       .catch((err) => next({ status: 500, message: "database problem" }));

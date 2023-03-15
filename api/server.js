@@ -16,6 +16,10 @@ server.use(helmet());
 server.use("/api/auth", authRouter);
 server.use("/api/posts", authMd.restricted, postRouter);
 server.use("/api/users", authMd.restricted, userRouter);
-server.use("/api/comment", commentRouter);
+server.use("/api/comment", authMd.restricted, commentRouter);
+
+server.use((err, req, res, next) => {
+  res.status(err.status).json({ message: err.message });
+});
 
 module.exports = server;

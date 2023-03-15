@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const token = useSelector((store) => store.token);
+  const userInfo = useSelector((store) => store.currentUser);
 
   return (
     <div>
@@ -28,7 +29,7 @@ function App() {
           {token ? <Posts /> : <Redirect to="/" />}
         </Route>
         <Route path="/api/users">
-          {token ? <Users /> : <Redirect to="/" />}
+          {token && userInfo.role === "admin" ? <Users /> : <Redirect to="/" />}
         </Route>
       </Switch>
     </div>

@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logOut } from "../reducer/actions";
+import { useHistory } from "react-router-dom";
 
 const SCNavLinkHeaderDiv = styled.div`
   max-width: 50rem;
@@ -15,7 +17,7 @@ const SCNavLinkHeaderDiv = styled.div`
 `;
 
 const SCNavLinkDiv = styled.div`
-  width: 40%;
+  width: ${(props) => (props.data ? "40%" : "30%")};
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
@@ -38,13 +40,39 @@ const SCNavLink = styled.p`
 
 function NavLinkHeader() {
   const links = useSelector((state) => state.navlinks);
+  const userData = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
+  const { push } = useHistory();
 
+  function handleClick() {
+    dispatch(logOut(userData.username));
+    setTimeout(() => {
+      push("/");
+    }, 2000);
+  }
   return (
     <SCNavLinkHeaderDiv>
       <NavLink style={{ textDecoration: "none", color: "black" }} to="/">
-        <h1>Twitter</h1>
+        <h1>Instagram</h1>
       </NavLink>
-      <SCNavLinkDiv>
+      <SCNavLinkDiv data={userData?.role}>
+        {!userData?.role && (
+          <NavLink
+            style={{ textDecoration: "none", color: "black" }}
+            to="/api/auth/login"
+          >
+            <SCNavLink>Login</SCNavLink>
+          </NavLink>
+        )}
+        {userData?.role && (
+          <NavLink
+            style={{ textDecoration: "none", color: "black" }}
+            to="/api/auth/login"
+          >
+            <SCNavLink onClick={handleClick}>Logout</SCNavLink>
+          </NavLink>
+        )}
+
         {links.map((link) => (
           <NavLink
             style={{ textDecoration: "none", color: "black" }}
@@ -53,6 +81,14 @@ function NavLinkHeader() {
             <SCNavLink>{link.link}</SCNavLink>
           </NavLink>
         ))}
+        {userData?.role === "admin" && (
+          <NavLink
+            style={{ textDecoration: "none", color: "black" }}
+            to="/api/users"
+          >
+            <SCNavLink>Users</SCNavLink>
+          </NavLink>
+        )}
       </SCNavLinkDiv>
     </SCNavLinkHeaderDiv>
   );

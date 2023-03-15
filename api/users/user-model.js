@@ -7,7 +7,7 @@ async function getAll() {
 }
 
 async function getById(userId) {
-  return await await db("users as u")
+  return await db("users as u")
     .leftJoin("roles as r", "r.roleId", "u.roleId")
     .select("u.*", "r.*")
     .where({ userId })

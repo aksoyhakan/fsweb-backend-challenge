@@ -80,7 +80,13 @@ function Post({ data }) {
         src={data.postPhoto}
         style={{ width: "100%", margin: "2rem auto", display: "block" }}
       />
-      <p style={{ margin: "0rem 0rem 1rem 1.5rem", fontSize: "1.25rem" }}>
+      <p
+        style={{
+          margin: "0rem 0rem 1rem 1.5rem",
+          fontSize: "1.25rem",
+          textAlign: "left",
+        }}
+      >
         {data.postNote}
       </p>
       <SCButtonDiv>
@@ -97,7 +103,13 @@ function Post({ data }) {
           }}
         />
       </SCButtonDiv>
-      <p style={{ margin: "0rem 0rem 2rem 1.5rem", fontSize: "1rem" }}>
+      <p
+        style={{
+          margin: "0rem 0rem 2rem 1.5rem",
+          fontSize: "1rem",
+          textAlign: "left",
+        }}
+      >
         {data.likeNumber} likes
       </p>
       {data.comments.map((comment) => (

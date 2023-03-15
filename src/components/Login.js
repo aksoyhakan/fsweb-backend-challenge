@@ -75,7 +75,7 @@ function Login() {
 
     setTimeout(() => {
       reset();
-      push("/api/posts");
+      push("/");
     }, 3500);
   }
 
