@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "server": "nodemon index.js",
     "rollback": "npx knex migrate:rollback",
     "migrate": "npx knex migrate:latest",
