@@ -8,6 +8,12 @@ router.get("/", (req, res, next) => {
     .catch((err) => next({ status: 500, message: "database problem" }));
 });
 
+router.post("/", postMd.checkPayloadPost, (req, res, next) => {
+  PostModels.insertPost(req.body)
+    .then((response) => res.status(200).json(response))
+    .catch((err) => next({ status: 500, message: "database problem" }));
+});
+
 router.get("/:id", postMd.checkIdExisting, (req, res, next) => {
   PostModels.getByPostId(req.params.id)
     .then((response) => res.status(200).json(response))
@@ -16,6 +22,12 @@ router.get("/:id", postMd.checkIdExisting, (req, res, next) => {
 
 router.put("/:id", postMd.checkIdExisting, (req, res, next) => {
   PostModels.updatePost(req.params.id, req.body)
+    .then((response) => res.status(200).json(response))
+    .catch((err) => next({ status: 500, message: "database problem" }));
+});
+
+router.delete("/:id", postMd.checkIdExisting, (req, res, next) => {
+  PostModels.removePost(req.params.id)
     .then((response) => res.status(200).json(response))
     .catch((err) => next({ status: 500, message: "database problem" }));
 });

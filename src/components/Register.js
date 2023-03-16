@@ -84,8 +84,8 @@ function Register() {
       {note.userId ? (
         <div>
           <p>Your Id: {note.userId}</p>
-          <p>USername: {note.username}</p>
-          <p>Cyrpted Password: {note.password}</p>
+          <p>Username: {note.username}</p>
+          <p>Email: {note.userEmail}</p>
         </div>
       ) : (
         <p>{note.message}</p>

@@ -40,7 +40,15 @@ async function dataAdjuster() {
 }
 
 async function insertComment(comment) {
-  const addComment = await db("comments").insert(comment);
+  const [addComment] = await db("comments").insert(comment);
+
+  await db.transaction(async (trx) => {
+    const [user] = await trx("users").where("userId", comment.userId);
+    if (!user) {
+      await db("comments").where("commentId", addComment).del();
+    }
+  });
+
   return await dataAdjuster();
 }
 

@@ -6,6 +6,7 @@ import {
   GET_POSTS,
   CLICK_COMMENT,
   GET_USERS,
+  CLICK_POST,
 } from "./actions";
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
   users: [],
   currentUser: JSON.parse(window.localStorage.getItem("currentUser")),
   clickedPostComment: 0,
+  clickedPost: false,
 };
 
 function reducer(state = initialState, action) {
@@ -67,6 +69,12 @@ function reducer(state = initialState, action) {
         clickedPostComment:
           state.clickedPostComment == action.payload ? 0 : action.payload,
       };
+    case CLICK_POST:
+      return {
+        ...state,
+        clickedPost: !state.clickedPost,
+      };
+
     case GET_USERS:
       return { ...state, users: action.payload };
     default:

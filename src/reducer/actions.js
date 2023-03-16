@@ -10,6 +10,7 @@ export const GET_USERS = "GET_USERS";
 export const LIKE_POST = "LIKE_POST";
 export const WRITE_COMMENT = "WRITE_COMMENT";
 export const CLICK_COMMENT = "CLICK_COMMENT";
+export const CLICK_POST = "CLICK_POST";
 
 export function getUsers(users) {
   return { type: GET_USERS, payload: users };
@@ -17,6 +18,10 @@ export function getUsers(users) {
 
 export function clickComment(postId) {
   return { type: CLICK_COMMENT, payload: postId };
+}
+
+export function clickPost() {
+  return { type: CLICK_POST };
 }
 
 export function changeUIMessage(message) {
@@ -131,5 +136,33 @@ export const getUsersAPI = (token) => (dispatch) => {
       headers: { authorization: token },
     })
     .then((response) => dispatch(getUsers(response.data)))
+    .catch((err) => console.log(err));
+};
+
+export const addPostAPI = (data) => (dispatch) => {
+  const { post, token } = data;
+
+  axios
+    .post(`http://localhost:9000/api/posts`, post, {
+      headers: { authorization: token },
+    })
+    .then((response) => {
+      dispatch(getPosts(response.data));
+      dispatch(clickComment(comment.postId));
+    })
+    .catch((err) => console.log(err));
+};
+
+export const deletePostAPI = (data) => (dispatch) => {
+  const { post, token } = data;
+
+  axios
+    .delete(`http://localhost:9000/api/posts/${post.postId}`, {
+      headers: { authorization: token },
+    })
+    .then((response) => {
+      dispatch(getPosts(response.data));
+      toast.success(`ID No:${post.postId} post is deleted successfully `);
+    })
     .catch((err) => console.log(err));
 };

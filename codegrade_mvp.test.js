@@ -94,7 +94,7 @@ describe("server.js", () => {
         roleId: 1,
       });
       const devon = await db("users").where("username", "Mehmet").first();
-      expect(devon).toMatchObject({ roleId: 1 });
+      expect(devon).toMatchObject({ roleId: 2 });
     }, 1500);
 
     it("[6] şifre düz metin yerine kriptolu bir şekilde kaydediliyor", async () => {
@@ -278,6 +278,119 @@ describe("server.js", () => {
         .post("/api/comment")
         .send({ postId: 1, userId: 2 });
       expect(res.body.message).toMatch(/Token not found/i);
+    }, 1500);
+  });
+
+  describe("[DELETE] /api/posts", () => {
+    it("[22] ilgili comment siliniyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .delete("/api/posts/1")
+        .set("authorization", res.body.token);
+      expect(res.body[0]).toMatchObject({
+        postId: 2,
+      });
+    }, 1500);
+    it("[23] olmayan post olunca hata mesajı veriyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .delete("/api/posts/12")
+        .set("authorization", res.body.token);
+      expect(res.body.message).toMatch(/ID No: 12 posts not found/i);
+    }, 1500);
+
+    it("[24] token eksik olduğunda hata mesajı alınıyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server).delete("/api/posts/12");
+      expect(res.body.message).toMatch(/Token not found/i);
+    }, 1500);
+    it("[25] token yanlış olduğunda hata mesajı alınıyorr", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .delete("/api/posts/3")
+        .set("authorization", `${res.body.token}A`);
+      expect(res.body.message).toMatch(/Invalid token/i);
+    }, 1500);
+  });
+  describe("[GET] /api/users", () => {
+    it("[26] admin olan kişi user bilgilerine ulaşabiliyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .get("/api/users")
+        .set("authorization", res.body.token);
+      expect(res.body.length).toBe(4);
+    }, 1500);
+    it("[27] admin olmayan kullanıcı olunca hata mesajı veriyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Meltem", password: "Meltem+11" });
+      res = await request(server)
+        .get("/api/users")
+        .set("authorization", res.body.token);
+      expect(res.body.message).toBe("You do not have authorization");
+    }, 1500);
+  });
+  describe("[POST] /api/posts", () => {
+    it("[28] ilgili post alınıyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .post("/api/posts")
+        .send({
+          postPhoto:
+            "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+          postNote: "Good day",
+          userId: 2,
+          likeNumber: 0,
+        })
+        .set("authorization", res.body.token);
+      expect(res.body[res.body.length - 1]).toMatchObject({
+        postPhoto:
+          "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+        postNote: "Good day",
+        userId: 2,
+        likeNumber: 0,
+      });
+    }, 1500);
+    it("[29] post photo eksik olduğunda hata mesajı alınıyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .post("/api/posts")
+        .send({
+          postNote: "Good day",
+          userId: 2,
+          likeNumber: 0,
+        })
+        .set("authorization", res.body.token);
+      expect(res.body.message).toBe("postPhoto property is missing");
+    }, 1500);
+    it("[30] userId eksik olduğunda hata mesajı alınıyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .post("/api/posts")
+        .send({
+          postPhoto:
+            "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+          postNote: "Good day",
+          likeNumber: 0,
+        })
+        .set("authorization", res.body.token);
+      expect(res.body.message).toBe("userId property is missing");
     }, 1500);
   });
 });

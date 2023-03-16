@@ -11,4 +11,13 @@ function checkIdExisting(req, res, next) {
   });
 }
 
-module.exports = { checkIdExisting };
+function checkPayloadPost(req, res, next) {
+  const keyArray = ["postPhoto", "postNote", "userId"];
+  keyArray.forEach((key) => {
+    !req.body[key] &&
+      next({ status: 404, message: `${key} property is missing` });
+  });
+  next();
+}
+
+module.exports = { checkIdExisting, checkPayloadPost };

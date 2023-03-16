@@ -53,4 +53,20 @@ async function updatePost(postId, post) {
   return await dataAdjuster();
 }
 
-module.exports = { getAll, getByPostId, updatePost };
+async function insertPost(post) {
+  const [addPost] = await db("posts").insert(post);
+  await db.transaction(async (trx) => {
+    const [user] = await trx("users").where("userId", post.userId);
+    if (!user) {
+      await db("posts").where("postId", addPost).del();
+    }
+  });
+  return await dataAdjuster();
+}
+
+async function removePost(postId) {
+  const deletedPost = await db("posts").where({ postId }).del();
+  return await dataAdjuster();
+}
+
+module.exports = { getAll, getByPostId, updatePost, insertPost, removePost };

@@ -59,7 +59,7 @@ router.post(
     const hashPassword = bcrypt.hashSync(req.body.password, 8);
     req.body.password = hashPassword;
 
-    req.body.roleId = 1;
+    req.body.roleId = 2;
     UserModels.addUser(req.body)
       .then((response) => res.status(201).json(response))
       .catch((err) => next({ status: 500, message: "database problem" }));
