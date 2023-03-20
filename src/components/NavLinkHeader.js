@@ -17,7 +17,7 @@ const SCNavLinkHeaderDiv = styled.div`
 `;
 
 const SCNavLinkDiv = styled.div`
-  width: ${(props) => (props.data ? "40%" : "30%")};
+  width: ${(props) => (props.data && props.data === "admin" ? "30%" : "30%")};
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
@@ -73,14 +73,18 @@ function NavLinkHeader() {
           </NavLink>
         )}
 
-        {links.map((link) => (
-          <NavLink
-            style={{ textDecoration: "none", color: "black" }}
-            to={link.path}
-          >
-            <SCNavLink>{link.link}</SCNavLink>
-          </NavLink>
-        ))}
+        {links.map(
+          (link) =>
+            (link.link !== "Register" ||
+              (link.link === "Register" && !userData?.role)) && (
+              <NavLink
+                style={{ textDecoration: "none", color: "black" }}
+                to={link.path}
+              >
+                <SCNavLink>{link.link}</SCNavLink>
+              </NavLink>
+            )
+        )}
         {userData?.role === "admin" && (
           <NavLink
             style={{ textDecoration: "none", color: "black" }}

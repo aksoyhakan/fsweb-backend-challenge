@@ -27,6 +27,7 @@ exports.up = function (knex) {
         .defaultTo(
           "https://i.pinimg.com/originals/3f/94/70/3f9470b34a8e3f526dbdb022f9f19cf7.jpg"
         );
+      user.primary(["roleId", "userId"]);
     })
     .createTable("posts", (post) => {
       post.increments("postId");
@@ -45,6 +46,7 @@ exports.up = function (knex) {
         .inTable("users")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
+      post.primary(["userId", "postId"]);
     })
     .createTable("comments", (comment) => {
       comment.increments("commentId");

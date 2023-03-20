@@ -3,6 +3,9 @@ const server = require("./api/server");
 const db = require("./data/dbconfig");
 const bcrypt = require("bcryptjs");
 const jwtDecode = require("jwt-decode");
+const CommentModels = require("./api/comments/comment-model");
+const PostModels = require("./api/posts/post-model");
+const UserModels = require("./api/users/user-model");
 
 beforeAll(async () => {
   await db.migrate.rollback();
@@ -222,9 +225,18 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body).toMatchObject({ postId: 3, username: "Meltem" });
     }, 1500);
+    it("[17] post yoksa hata mesajı alıyor", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Hakan", password: "Hakan+11" });
+      res = await request(server)
+        .get("/api/posts/12")
+        .set("authorization", res.body.token);
+      expect(res.body.message).toBe("ID No: 12 posts not found");
+    }, 1500);
   });
   describe("[POST] /api/comment", () => {
-    it("[17] ilgili comment alınıyor", async () => {
+    it("[18] ilgili comment alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -240,7 +252,7 @@ describe("server.js", () => {
         username: "Meltem",
       });
     }, 1500);
-    it("[18] commentNote eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[19] commentNote eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -250,7 +262,7 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body.message).toMatch(/commentNote property is missing/i);
     }, 1500);
-    it("[19] postId eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[20] postId eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -260,7 +272,7 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body.message).toMatch(/postId property is missing/i);
     }, 1500);
-    it("[20] userId eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[21] userId eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -270,7 +282,7 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body.message).toMatch(/userId property is missing/i);
     }, 1500);
-    it("[21] token eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[22] token eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -282,7 +294,7 @@ describe("server.js", () => {
   });
 
   describe("[DELETE] /api/posts", () => {
-    it("[22] ilgili comment siliniyor", async () => {
+    it("[23] ilgili comment siliniyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -293,7 +305,7 @@ describe("server.js", () => {
         postId: 2,
       });
     }, 1500);
-    it("[23] olmayan post olunca hata mesajı veriyor", async () => {
+    it("[24] olmayan post olunca hata mesajı veriyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -303,14 +315,14 @@ describe("server.js", () => {
       expect(res.body.message).toMatch(/ID No: 12 posts not found/i);
     }, 1500);
 
-    it("[24] token eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[25] token eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
       res = await request(server).delete("/api/posts/12");
       expect(res.body.message).toMatch(/Token not found/i);
     }, 1500);
-    it("[25] token yanlış olduğunda hata mesajı alınıyorr", async () => {
+    it("[26] token yanlış olduğunda hata mesajı alınıyorr", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -321,7 +333,7 @@ describe("server.js", () => {
     }, 1500);
   });
   describe("[GET] /api/users", () => {
-    it("[26] admin olan kişi user bilgilerine ulaşabiliyor", async () => {
+    it("[27] admin olan kişi user bilgilerine ulaşabiliyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -330,7 +342,7 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body.length).toBe(4);
     }, 1500);
-    it("[27] admin olmayan kullanıcı olunca hata mesajı veriyor", async () => {
+    it("[28] admin olmayan kullanıcı olunca hata mesajı veriyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Meltem", password: "Meltem+11" });
@@ -341,7 +353,7 @@ describe("server.js", () => {
     }, 1500);
   });
   describe("[POST] /api/posts", () => {
-    it("[28] ilgili post alınıyor", async () => {
+    it("[29] ilgili post alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -363,7 +375,7 @@ describe("server.js", () => {
         likeNumber: 0,
       });
     }, 1500);
-    it("[29] post photo eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[30] post photo eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -377,7 +389,7 @@ describe("server.js", () => {
         .set("authorization", res.body.token);
       expect(res.body.message).toBe("postPhoto property is missing");
     }, 1500);
-    it("[30] userId eksik olduğunda hata mesajı alınıyor", async () => {
+    it("[31] userId eksik olduğunda hata mesajı alınıyor", async () => {
       let res = await request(server)
         .post("/api/auth/login")
         .send({ username: "Hakan", password: "Hakan+11" });
@@ -391,6 +403,128 @@ describe("server.js", () => {
         })
         .set("authorization", res.body.token);
       expect(res.body.message).toBe("userId property is missing");
+    }, 1500);
+  });
+  describe("Comments Model", () => {
+    it("[32] insertComment check", async () => {
+      const input = { commentNote: "çok güzel", postId: 1, userId: 2 };
+      const expected = {
+        avatarPhoto:
+          "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+        commentNote: "çok güzel",
+        userId: 2,
+        username: "Meltem",
+      };
+      const actual = await CommentModels.insertComment(input);
+      expect(actual[0]["comments"][3]).toMatchObject(expected);
+    }, 1500);
+  });
+  describe("Post Models", () => {
+    it("[33] getAll check", async () => {
+      const expected = 7;
+      const actual = await PostModels.getAll();
+      expect(actual.length).toBe(expected);
+    }, 1500);
+    it("[34] getAll check", async () => {
+      const input = 1;
+      const expected = { postId: 1, username: "Hakan" };
+      const actual = await PostModels.getByPostId(input);
+      expect(actual).toMatchObject(expected);
+    }, 1500);
+    it("[35] updatePost check", async () => {
+      const input = {
+        post: {
+          postPhoto:
+            "https://fastly.picsum.photos/id/84/1280/848.jpg?hmac=YFRYDI4UsfbeTzI8ZakNOR98wVU7a-9a2tGF542539s",
+          postNote: "Harikaaaa",
+          likeNumber: 0,
+          userId: 4,
+        },
+        postId: 7,
+      };
+      const expected = {
+        postPhoto:
+          "https://fastly.picsum.photos/id/84/1280/848.jpg?hmac=YFRYDI4UsfbeTzI8ZakNOR98wVU7a-9a2tGF542539s",
+        postNote: "Harikaaaa",
+        likeNumber: 0,
+        userId: 4,
+      };
+      const actual = await PostModels.updatePost(input.postId, input.post);
+      expect(actual[7 - 1]).toMatchObject(expected);
+    }, 1500);
+    it("[36] insertPost check", async () => {
+      const input = {
+        postPhoto:
+          "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+        postNote: "Good day",
+        userId: 2,
+        likeNumber: 0,
+      };
+      const expected = {
+        postPhoto:
+          "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+        postNote: "Good day",
+        userId: 2,
+        likeNumber: 0,
+      };
+      const actual = await PostModels.insertPost(input);
+      expect(actual[actual.length - 1]).toMatchObject(expected);
+    }, 1500);
+    it("[37] removePost check", async () => {
+      const input = 4;
+      const expected = 6;
+      const actual = await PostModels.removePost(4);
+      expect(actual.length).toBe(expected);
+    }, 1500);
+  });
+  describe("User Models", () => {
+    it("[38] getAll check", async () => {
+      const expected = 4;
+      const actual = await UserModels.getAll();
+      expect(actual.length).toBe(expected);
+    }, 1500);
+    it("[39] getById check", async () => {
+      const input = 4;
+      const expected = { userId: 4, username: "Ramazan" };
+      const actual = await UserModels.getById(input);
+      expect(actual).toMatchObject(expected);
+    }, 1500);
+    it("[40]  addUser check", async () => {
+      const input = 4;
+      const expected = {
+        username: "Zana",
+        password: "Zana+11",
+        userEmail: "zana@gmail.com",
+        birthday: "1966-10-25",
+        avatarPhoto:
+          "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+        roleId: 2,
+      };
+      const actual = await UserModels.addUser(expected);
+      expect(actual).toMatchObject(expected);
+    }, 1500);
+    it("[41]  updateUser check", async () => {
+      const input = {
+        userId: 1,
+        user: {
+          username: "Ali",
+          password: "Ali+11",
+          userEmail: "ali@gmail.com",
+          birthday: "1966-10-25",
+          avatarPhoto:
+            "https://fastly.picsum.photos/id/108/2000/1333.jpg?hmac=jtsJnUALS7Y2pJnLKGF7fSvGhEKpDWLvjTr9bRVFELA",
+          roleId: 2,
+        },
+      };
+      const expected = input.userId;
+      const actual = await UserModels.updateUser(input.userId, input.user);
+      expect(actual).toBe(expected);
+    }, 1500);
+    it("[42] removeUser check", async () => {
+      const input = 3;
+      const expected = 3;
+      const actual = await UserModels.removeUser(input);
+      expect(actual.length).toBe(expected);
     }, 1500);
   });
 });
